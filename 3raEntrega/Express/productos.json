@@ -1,0 +1,68 @@
+[
+	{
+		"nombre": "Suzuki Dr300",
+		"categoria": "Motocicletas",
+		"cantidad": 10,
+		"id": 1
+	},
+	{
+		"nombre": "Ford K",
+		"categoria": "Automotores",
+		"cantidad": 10,
+		"id": 2
+	},
+	{
+		"nombre": "Ford Eco Sport",
+		"categoria": "Automotores",
+		"cantidad": 10,
+		"id": 3
+	},
+	{
+		"nombre": "Tornado 150",
+		"categoria": "Motocicletas",
+		"cantidad": 10,
+		"id": 4
+	},
+	{
+		"nombre": "Volkswagen Amarok",
+		"categoria": "Automotores",
+		"cantidad": 10,
+		"id": 5
+	},
+	{
+		"nombre": "Fiat Palio",
+		"categoria": "Automotores",
+		"cantidad": 10,
+		"id": 6
+	},
+	{
+		"nombre": "Honda Dax",
+		"categoria": "Motocicletas",
+		"cantidad": 10,
+		"id": 7
+	},
+	{
+		"nombre": "KTM 600",
+		"categoria": "Motocicletas",
+		"cantidad": 10,
+		"id": 8
+	},
+	{
+		"nombre": "Kawasaki 900",
+		"categoria": "Motocicletas",
+		"cantidad": 10,
+		"id": 9
+	},
+	{
+		"nombre": "Suzuki FUN",
+		"categoria": "Automotores",
+		"cantidad": 10,
+		"id": 10
+	},
+	{
+		"nombre": "Honda Civic",
+		"categoria": "Automotores",
+		"cantidad": 10,
+		"id": 11
+	}
+]
