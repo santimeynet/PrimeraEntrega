@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realtime Products</title>
+</head>
+<body>
+    <h1>Realtime Products</h1>
+    <ul id="product-list"></ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('products', (products) => {
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = products.map(product => 
+            `<li>
+                <strong>Title:</strong> ${product.title}<br>
+                <strong>Description:</strong> ${product.description}<br>
+                <strong>Price:</strong> ${product.price}<br>
+                <strong>Thumbnail:</strong> ${product.thumbnail}<br>
+                <strong>Code:</strong> ${product.code}<br>
+                <strong>Stock:</strong> ${product.stock}<br>
+                <strong>Status:</strong> ${product.status}<br>
+                <strong>Category:</strong> ${product.category}
+            </li>`).join('');
+        });
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  socket.emit('join-realtimeproducts');
+</script>
+</body>
+</html>
+
