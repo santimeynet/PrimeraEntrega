@@ -1,6 +1,8 @@
 import express from 'express';
 import productRouter from './routes/products.router.js';
 import cartRouter from './routes/carts.router.js';
+import MongoStore from "connect-mongo";
+import session from "express-session";
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
 import {__dirname} from './utils.js'
@@ -10,6 +12,7 @@ import mongoose from 'mongoose';
 import { initializeApp } from './appInitialization.js';
 import Handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
+import sessionRouter from "./routes/sessions.routes.js";
 
 
 
@@ -18,6 +21,22 @@ import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access
 const app = express();
 const port = 8080;
 const pManager = new ProductManager();
+
+const MONGO = 'mongodb+srv://santimeynet:mmyynntt@ecommerce.sgmhbgf.mongodb.net/ecommerce';
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}))
+app.use(express.static(__dirname + '/public'));
+
+app.use(session({
+    store: new MongoStore({
+        mongoUrl: MONGO,
+        ttl:3600
+    }),
+    secret:"CoderSecret",
+    resave:false,
+    saveUninitialized:false
+}))
 
 
 app.engine(
@@ -37,20 +56,16 @@ const io = new Server(httpServer);
 
 
 
-mongoose.connect(
-  'mongodb+srv://santimeynet:mmyynntt@ecommerce.sgmhbgf.mongodb.net/ecommerce'
-).then(() => {
-  console.log('DB connected');
-}).catch((err) => {
-  console.log('Hubo un error');
-  console.log(err);
-});
+
+  
+
 
 initializeApp(app, __dirname);
 
 app.use('/api/product', productRouter);
 app.use('/api/cart', cartRouter);
 app.use('/', viewsRouter);
+app.use('/api/sessions', sessionRouter);
 
 
 io.on('connection', async (socket) => {
