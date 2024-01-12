@@ -14,30 +14,32 @@ import Handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import sessionRouter from "./routes/sessions.routes.js";
 
-
-
-
+mongoose.connect(
+  'mongodb+srv://santimeynet:mmyynntt@ecommerce.sgmhbgf.mongodb.net/ecommerce'
+).then(() => {
+  console.log('DB connected');
+}).catch((err) => {
+  console.log('Hubo un error');
+  console.log(err);
+});
 
 const app = express();
 const port = 8080;
 const pManager = new ProductManager();
 
-const MONGO = 'mongodb+srv://santimeynet:mmyynntt@ecommerce.sgmhbgf.mongodb.net/ecommerce';
-
 app.use(express.json());
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
 
 app.use(session({
     store: new MongoStore({
-        mongoUrl: MONGO,
-        ttl:3600
+        mongoUrl: 'mongodb+srv://santimeynet:mmyynntt@ecommerce.sgmhbgf.mongodb.net/ecommerce',
+        ttl: 3600
     }),
-    secret:"CoderSecret",
-    resave:false,
-    saveUninitialized:false
-}))
-
+    secret: "CoderSecret",
+    resave: false,
+    saveUninitialized: false
+}));
 
 app.engine(
     "handlebars",
@@ -46,19 +48,12 @@ app.engine(
       defaultLayout: "main",
       handlebars: allowInsecurePrototypeAccess(Handlebars),
     })
-  );
-
+);
 
 const httpServer = app.listen(port, () =>
   console.log(`Servidor Express corriendo en el puerto ${port}`)
 );
 const io = new Server(httpServer); 
-
-
-
-
-  
-
 
 initializeApp(app, __dirname);
 
@@ -66,7 +61,6 @@ app.use('/api/product', productRouter);
 app.use('/api/cart', cartRouter);
 app.use('/', viewsRouter);
 app.use('/api/sessions', sessionRouter);
-
 
 io.on('connection', async (socket) => {
   console.log('Nuevo cliente conectado');
