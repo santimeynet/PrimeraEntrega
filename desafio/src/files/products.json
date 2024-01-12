@@ -1,1 +1,183 @@
-[{"title":"Moto2","description":"Motoneta","price":"$1222","stock":"1","id":1},{"title":"Moto Suzuki","description":"Motoneta","price":"$5445","stock":"5","id":2}]
+[
+    {
+      "id": 1,
+      "title": "Producto 1",
+      "description": "Descripción del Producto 1",
+      "price": 19.99,
+      "thumbnails": ["url1", "url2", "url3"],
+      "code": "P001",
+      "stock": 50
+    },
+    {
+      "id": 2,
+      "title": "Producto 2",
+      "description": "Descripción del Producto 2",
+      "price": 29.99,
+      "thumbnails": ["url4", "url5", "url6"],
+      "code": "P002",
+      "stock": 30
+    },
+    {
+      "id": 3,
+      "title": "Producto 3",
+      "description": "Descripción del Producto 3",
+      "price": 39.99,
+      "thumbnails": ["url7", "url8", "url9"],
+      "code": "P003",
+      "stock": 25
+    },
+    {
+      "id": 4,
+      "title": "Producto 4",
+      "description": "Descripción del Producto 4",
+      "price": 49.99,
+      "thumbnails": ["url10", "url11", "url12"],
+      "code": "P004",
+      "stock": 40
+    },
+    {
+      "id": 5,
+      "title": "Producto 5",
+      "description": "Descripción del Producto 5",
+      "price": 59.99,
+      "thumbnails": ["url13", "url14", "url15"],
+      "code": "P005",
+      "stock": 20
+    },
+    {
+      "id": 6,
+      "title": "Producto 6",
+      "description": "Descripción del Producto 6",
+      "price": 69.99,
+      "thumbnails": ["url16", "url17", "url18"],
+      "code": "P006",
+      "stock": 35
+    },
+    {
+      "id": 7,
+      "title": "Producto 7",
+      "description": "Descripción del Producto 7",
+      "price": 79.99,
+      "thumbnails": ["url19", "url20", "url21"],
+      "code": "P007",
+      "stock": 15
+    },
+    {
+      "id": 8,
+      "title": "Producto 8",
+      "description": "Descripción del Producto 8",
+      "price": 89.99,
+      "thumbnails": ["url22", "url23", "url24"],
+      "code": "P008",
+      "stock": 28
+    },
+    {
+      "id": 9,
+      "title": "Producto 9",
+      "description": "Descripción del Producto 9",
+      "price": 99.99,
+      "thumbnails": ["url25", "url26", "url27"],
+      "code": "P009",
+      "stock": 22
+    },
+    {
+      "id": 10,
+      "title": "Producto 10",
+      "description": "Descripción del Producto 10",
+      "price": 109.99,
+      "thumbnails": ["url28", "url29", "url30"],
+      "code": "P010",
+      "stock": 18
+    },
+    {
+      "id": 11,
+      "title": "Producto 11",
+      "description": "Descripción del Producto 11",
+      "price": 119.99,
+      "thumbnails": ["url31", "url32", "url33"],
+      "code": "P011",
+      "stock": 32
+    },
+    {
+      "id": 12,
+      "title": "Producto 12",
+      "description": "Descripción del Producto 12",
+      "price": 129.99,
+      "thumbnails": ["url34", "url35", "url36"],
+      "code": "P012",
+      "stock": 12
+    },
+    {
+      "id": 13,
+      "title": "Producto 13",
+      "description": "Descripción del Producto 13",
+      "price": 139.99,
+      "thumbnails": ["url37", "url38", "url39"],
+      "code": "P013",
+      "stock": 45
+    },
+    {
+      "id": 14,
+      "title": "Producto 14",
+      "description": "Descripción del Producto 14",
+      "price": 149.99,
+      "thumbnails": ["url40", "url41", "url42"],
+      "code": "P014",
+      "stock": 23
+    },
+    {
+      "id": 15,
+      "title": "Producto 15",
+      "description": "Descripción del Producto 15",
+      "price": 159.99,
+      "thumbnails": ["url43", "url44", "url45"],
+      "code": "P015",
+      "stock": 38
+    },
+    {
+      "id": 16,
+      "title": "Producto 16",
+      "description": "Descripción del Producto 16",
+      "price": 169.99,
+      "thumbnails": ["url46", "url47", "url48"],
+      "code": "P016",
+      "stock": 28
+    },
+    {
+      "id": 17,
+      "title": "Producto 17",
+      "description": "Descripción del Producto 17",
+      "price": 179.99,
+      "thumbnails": ["url49", "url50", "url51"],
+      "code": "P017",
+      "stock": 19
+    },
+    {
+      "id": 18,
+      "title": "Producto 18",
+      "description": "Descripción del Producto 18",
+      "price": 189.99,
+      "thumbnails": ["url52", "url53", "url54"],
+      "code": "P018",
+      "stock": 33
+    },
+    {
+      "id": 19,
+      "title": "Producto 19",
+      "description": "Descripción del Producto 19",
+      "price": 199.99,
+      "thumbnails": ["url55", "url56", "url57"],
+      "code": "P019",
+      "stock": 14
+    },
+    {
+      "id": 20,
+      "title": "Producto 20",
+      "description": "Descripción del Producto 20",
+      "price": 209.99,
+      "thumbnails": ["url58", "url59", "url60"],
+      "code": "P020",
+      "stock": 10
+    }
+  ]
+

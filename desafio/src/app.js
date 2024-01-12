@@ -1,73 +1,98 @@
 import express from 'express';
-import __dirname from './utils.js';
-import { ProductRouter } from './routes/products.router.js';
-import { CartRouter } from './routes/carts.router.js';
-import { engine } from 'express-handlebars';
-import viewsRouter from './routes/views.router.js'
+import productRouter from './routes/products.router.js';
+import cartRouter from './routes/carts.router.js';
 import { Server } from 'socket.io';
+import handlebars from 'express-handlebars';
+import {__dirname} from './utils.js'
+import viewsRouter from './routes/views.routes.js';
 import ProductManager from './dao/managersFS/ProductManager.js';
 import mongoose from 'mongoose';
-import {dbProductRouter} from './routes/db.products.router.js';
-import { dbCartRouter } from './routes/db.carts.router.js';
-import chatRouter from './routes/db.chat.router.js';
-import Message from './dao/db/models/message.model.js';
+import { initializeApp } from './appInitialization.js';
+import Handlebars from "handlebars";
+import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 
 
-const PORT = 8080;
+
+
 
 const app = express();
-const MONGO = "mongodb+srv://santimeynet:mmyynntt@ecommerce.sgmhbgf.mongodb.net/ecommerce";
-const connection = mongoose.connect(MONGO);
+const port = 8080;
+const pManager = new ProductManager();
 
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.engine(
+    "handlebars",
+    handlebars.engine({
+      extname: "handlebars",
+      defaultLayout: "main",
+      handlebars: allowInsecurePrototypeAccess(Handlebars),
+    })
+  );
 
-const httpServer = app.listen(PORT, () => {
-    console.log(`express localhost: ${PORT}`)
+
+const httpServer = app.listen(port, () =>
+  console.log(`Servidor Express corriendo en el puerto ${port}`)
+);
+const io = new Server(httpServer); 
+
+
+
+mongoose.connect(
+  'mongodb+srv://santimeynet:mmyynntt@ecommerce.sgmhbgf.mongodb.net/ecommerce'
+).then(() => {
+  console.log('DB connected');
+}).catch((err) => {
+  console.log('Hubo un error');
+  console.log(err);
 });
 
-const socketServer = new Server(httpServer);
+initializeApp(app, __dirname);
+
+app.use('/api/product', productRouter);
+app.use('/api/cart', cartRouter);
+app.use('/', viewsRouter);
 
 
+io.on('connection', async (socket) => {
+  console.log('Nuevo cliente conectado');
 
+  try {
+    socket.emit('productos', await pManager.getProducts());
 
-app.engine("handlebars",engine());
-app.set("view engine", "handlebars");
-app.set("views", __dirname + "/views");
-app.use("/", express.static(__dirname + "/public"));
+    socket.on('post_send', async (data) => {
+      try {
+        const product = {
+          price: Number(data.price),
+          stock: Number(data.stock),
+          title: data.title,
+          description: data.description,
+          code: data.code,
+          thumbnails: data.thumbnails,
+        };
 
-app.use("/realtimeproducts", viewsRouter)
-app.use("/api/products", ProductRouter);
-app.use("/api/carts", CartRouter);
-//MONGO
-app.use("/db/products",dbProductRouter)
-app.use("/db/carts",dbCartRouter)
-app.use('/chat', chatRouter);
-
-socketServer.on("connection", (socket) => {
-    console.log("Nuevo cliente conectado con ID:",socket.id);
-    socket.on('chatMessage', async (data) => {
-        try {
-          await Message.create(data);
-          socket.emit('chatMessage', data);
-        } catch (error) {
-          console.error('Error al guardar el mensaje en la base de datos:', error.message);
-        }
-      });
-
-    socket.on('addProduct', async (productData) => {
-        try {
-            console.log('Datos del producto recibidos en el servidor:', productData);
-
-            const productManager = new ProductManager('products.json');
-            await productManager.initializeId();
-            await productManager.addProduct(productData.title, productData.description, productData.price, productData.thumbnails, productData.code, productData.stock);
-
-
-            socketServer.emit('newProduct', productData);
-        } catch (error) {
-            console.error('Error al agregar producto:', error.message);
-        }
+        await pManager.addProduct(product);
+        socket.emit('productos', await pManager.getProducts());
+      } catch (error) {
+        console.log(error);
+      }
     });
+
+    socket.on('delete_product', async (_id) => {
+      try {
+        const deletedProduct = await pManager.deleteProduct(_id);
+        if (deletedProduct) {
+          console.log('Producto eliminado:', deletedProduct);
+          socket.emit('productos', await pManager.getProducts());
+        } else {
+          console.log('El producto no existe o no se pudo eliminar.');
+        }
+      } catch (error) {
+        console.error('Error al eliminar el producto:', error);
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
 });
+
+export default app;

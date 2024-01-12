@@ -1,141 +1,101 @@
 import { Router } from "express";
 import ProductManager from "../dao/managersFS/ProductManager.js";
 
+
+
+const manager = new ProductManager('products.json');
 const router = Router();
-const path = "products.json"
-const manager = new ProductManager(path);
-const readProducts = manager.readProducts();
 
 
 
-router.get("/", async (req, res) => {
-  let limit = parseInt(req.query.limit);
-  if (!limit) return res.send(await readProducts);
-  let allProducts = await readProducts;
-  let productLimit = allProducts.slice(0, limit);
-
-  res.send(productLimit);
-})
-
-
-router.post('/', async (req, res) => {
-  try {
-    const { title, description, price, code, stock,  thumbnails } = req.body;
-
-    await manager.addProduct(title, description, price, code, stock, thumbnails);
-
-    res.send({
-      status: "Success",
-      msg: `Producto Agregado correctamente`
-    });
-  } catch (error) {
-    console.error('Error al procesar la solicitud:', error.message);
-    res.status(400).json({ error: error.message });
-  }
-});
-
-
-router.get("/:pid", async (req, res) => {
-  try {
-    let pid = parseInt(req.params.pid);
-    let allProducts = await readProducts;
-    let productById = allProducts.find(product => product.id === pid);
-
-    if (!productById) {
-        throw new Error("Producto no encontrado");
+router.get('/', (req, res) => {
+    const { limit } = req.query;
+    let productsToSend = manager.getProducts();
+    
+    if (limit) {
+        const parsedLimit = parseInt(limit);
+        if (!isNaN(parsedLimit)) {
+            productsToSend = productsToSend.slice(0, parsedLimit);
+        }
     }
 
-    res.status(200).json({
-        status: "Success",
-        productById
-    });
-} catch (error) {
-    console.error('Error al procesar la solicitud:', error.message);
-    res.status(404).json({
-        status: "Error",
-        msg: error.message
-    });
-}});
+    res.json(productsToSend);
+});
+
+
+router.get('/:pid', (req, res) => {
+    const productpid = parseInt(req.params.pid);
+    const product = manager.getProductBypid(productpid);
+
+    if (product) {
+        res.json(product);
+    } else {
+        res.status(404).json({ error: 'Producto no encontrado' });
+    }
+});
+
+
+router.post('/', (req, res) => {
+    const { title, description, code, price, stock, category, thumbnails } = req.body;
+
+    if (!title || !description || !code || !price || !stock || !category) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios excepto thumbnails' });
+    }
+
+    const newProduct = {
+        title,
+        description,
+        code,
+        price: Number(price),
+        status: true,
+        stock: Number(stock),
+        category,
+        thumbnails: thumbnails ? Array.isArray(thumbnails) ? thumbnails : [thumbnails] : [],
+        pid: manager.getNextProductpid()
+    };
+
+    manager.addProduct(newProduct);
+
+    res.status(201).json(newProduct);
+});
+
+
+router.put("/:pid", (req, res) => {
+
+    const pid = parseInt(req.params.pid);
+
+
+    const updatedProduct = req.body;
+
+
+    const product = manager.updateProduct(pid, updatedProduct);
+    if (!product) {
+        res.status(404).json({ error: "Producto no encontrado" });
+        return;
+    }
+
+
+    res.json(product);
+});
 
 
 
+router.delete("/:pid", (req, res) => {
+
+    const pid = parseInt(req.params.pid);
 
 
-router.put("/:pid", async (req, res) => {
-  try {
-      const pid = parseInt(req.params.pid);
-      const { title, description, price, code, stock, thumbnails } = req.body;
+    const product = manager.deleteProduct(pid);
+    if (!product) {
+        res.status(404).json({ error: "Producto no encontrado" });
+        return;
+    }
 
-      
-      const existingProduct = await manager.getProductsByID(pid);
 
-      if (!existingProduct) {
-          throw new Error("Producto no encontrado");
-      }
-
-      
-      const updatedProduct = await manager.upgradeProduct({
-          id: pid,
-          title,
-          description,
-          price,
-          code,
-          stock,
-          thumbnails,
-      });
-
-      res.status(200).json({
-          status: "Success",
-          msg: `Producto actualizado correctamente`,
-          updatedProduct,
-      });
-  } catch (error) {
-      console.error('Error al procesar la solicitud:', error.message);
-      res.status(error.message === "Producto no encontrado" ? 404 : 500).json({
-          status: "Error",
-          msg: error.message
-      });
-  }
+    res.json({ message: "Producto eliminado" });
 });
 
 
 
 
-router.delete("/:pid", async (req, res) => {
-  try {
-      const pid = parseInt(req.params.pid);
-
-     
-      const existingProduct = await manager.getProductsByID(pid);
-
-      if (!existingProduct) {
-          throw new Error("Producto no encontrado");
-      }
-
-      
-      await manager.deleteProductByID(pid);
-
-      res.status(200).json({
-          status: "Success",
-          msg: `Producto eliminado correctamente`,
-      });
-  } catch (error) {
-      console.error('Error al procesar la solicitud:', error.message);
-      res.status(error.message === "Producto no encontrado" ? 404 : 500).json({
-          status: "Error",
-          msg: error.message
-      });
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-export { router as ProductRouter }
+export default router;

@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/index.css">
     <title>Document</title>
 </head>
 <body>
@@ -27,7 +26,6 @@
    <div id="list-products">
         <h2>Lista de Productos</h2>
         <ul id="products-list">
-            <!-- Aquí va la lista de productos -->
             {{#each products}}
                 <li>Nombre: {{this.title}}, Precio: {{this.price}}, Descripción: {{this.description}}</li>
             {{/each}}

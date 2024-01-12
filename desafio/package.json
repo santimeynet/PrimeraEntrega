@@ -1,7 +1,7 @@
 {
   "name": "filesystem",
   "version": "1.0.0",
-  "main": "desafio-dos.js",
+  "main": "desafio.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,10 +11,13 @@
   "keywords": [],
   "description": "",
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
     "express": "^4.18.2",
     "express-handlebars": "^7.1.2",
+    "hbs": "^4.2.0",
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.3",
+    "mongoose-paginate-v2": "^1.7.4",
     "socket.io": "^4.7.2"
   }
 }
