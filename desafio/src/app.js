@@ -5,6 +5,9 @@ import MongoStore from "connect-mongo";
 import session from "express-session";
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
+import passport from "passport";
+
+
 import {__dirname} from './utils.js'
 import viewsRouter from './routes/views.routes.js';
 import ProductManager from './dao/managersFS/ProductManager.js';
@@ -13,6 +16,7 @@ import { initializeApp } from './appInitialization.js';
 import Handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import sessionRouter from "./routes/sessions.routes.js";
+import inicializePassport from "./config/passport.config.js";
 
 mongoose.connect(
   'mongodb+srv://santimeynet:mmyynntt@ecommerce.sgmhbgf.mongodb.net/ecommerce'
@@ -41,6 +45,12 @@ app.use(session({
     saveUninitialized: false
 }));
 
+
+inicializePassport()
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 app.engine(
     "handlebars",
     handlebars.engine({
@@ -60,7 +70,7 @@ initializeApp(app, __dirname);
 app.use('/api/product', productRouter);
 app.use('/api/cart', cartRouter);
 app.use('/', viewsRouter);
-app.use('/api/sessions', sessionRouter);
+app.use('/api/session', sessionRouter);
 
 io.on('connection', async (socket) => {
   console.log('Nuevo cliente conectado');

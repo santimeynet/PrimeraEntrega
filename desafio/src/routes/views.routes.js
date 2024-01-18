@@ -6,31 +6,33 @@ const router = Router();
 const path = "products.json";
 const manager = new ProductManager(path);
 
-const publicAccess = (req, res, next) => {
-    if (req.session.user) {
+const publicAccess = (req,res,next) =>{
+    if(req.session.user){
         return res.redirect('/');
     }
     next();
-};
-
-const privateAccess = (req, res, next) => {
-    if (!req.session.user) {
+}
+const privateAccess = (req,res,next) =>{
+    if(!req.session.user){
         return res.redirect('/login');
     }
     next();
-};
-
-router.get('/register', publicAccess, (req, res) => {
-    res.render('register');
+}
+router.get('/register', publicAccess, (req,res)=>{
+    res.render('register')
 });
+router.get('/login', publicAccess, (req,res)=>{
+    res.render('login')
+})
+router.get('/',privateAccess, (req,res)=>{
+    res.render('profile', {user:req.session.user})
+})
 
-router.get('/login', publicAccess, (req, res) => {
-    res.render('login');
-});
+router.get("/resetPassword", (req,res)=>{
+    res.render("resetPassword");
+})
 
-router.get('/', (req, res) => {
-    res.render('home.handlebars');
-});
+
 
 router.get('/profile', privateAccess, (req, res) => {
     res.render('profile', { user: req.session.user });
@@ -53,5 +55,6 @@ router.get("/products", async (req, res) => {
         products,
     });
 });
+
 
 export default router;
