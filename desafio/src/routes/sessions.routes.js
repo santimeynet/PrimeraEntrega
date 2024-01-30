@@ -2,6 +2,7 @@ import { Router } from "express";
 import UserModel from "../dao/db/models/Users.model.js"
 import { createHash, validatePassword } from "../utils.js";
 import passport from "passport";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 
@@ -15,18 +16,20 @@ router.get("/failregister", async (req,res)=>{
     res.send({error: 'fallo en el registro'})
 })
 
-router.post("/login", passport.authenticate("login", {failureRedirect:'/api/session/faillogin'}),
-async (req,res) =>{ 
-    if(!req.user){
-        return res.status(400).send({status:"error"})
-    }
-    req.session.user ={
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        age:req.user.age,
+router.post("/login", passport.authenticate("login",{failureRedirect:"api/sessions/failedLogin",
+session:false}),(req,res)=>{
+    const serializedUser ={
+        id: req.user._id,
+        name : `${req.user.first_name} ${req.user.last_name}`,
+        role: req.user.rol,
         email:req.user.email
-    }
-    res.send({status:"success", payload:req.user})
+    };
+    const token = jwt.sign(serializedUser, 'CodeerSecret',{expiresIn:"1h"});
+    console.log(token);
+    res.cookie('coderCookie',token,{maxAge:3600000}).send({
+        status:"succes",
+        payload:serializedUser
+    })
 })
 
 router.get("/faillogin", (req,res)=>{
