@@ -3,6 +3,8 @@ import productRouter from './routes/products.router.js';
 import cartRouter from './routes/carts.router.js';
 import MongoStore from "connect-mongo";
 import session from "express-session";
+import { errorHandler } from "./middleware/errorHandler.js";
+import { usersRouter } from "./routes/user.route.js";
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
 import passport from "passport";
@@ -34,6 +36,8 @@ const pManager = new ProductManager();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
+app.use("/api/users", usersRouter);
+app.use(errorHandler);
 
 app.use(session({
     store: new MongoStore({
