@@ -8,6 +8,7 @@ import { usersRouter } from "./routes/user.route.js";
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
 import passport from "passport";
+import { addLogger } from "./utils/logger.js";
 
 
 import {__dirname} from './utils.js'
@@ -38,6 +39,12 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
 app.use("/api/users", usersRouter);
 app.use(errorHandler);
+app.use(addLogger);
+
+app.get("/", (req,res)=>{
+    req.logger.warn("Error!");
+    res.send("Bienvenido!")
+})
 
 app.use(session({
     store: new MongoStore({

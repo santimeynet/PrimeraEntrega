@@ -1,0 +1,8 @@
+{"level":"warn","message":"Error!"}
+{"level":"warn","message":"Error!"}
+{"level":"debug","message":"Detalles de depuración aquí"}
+{"level":"http","message":"Petición HTTP recibida en /ruta"}
+{"level":"info","message":"Inicio de sesión de usuario exitoso"}
+{"level":"warning","message":"Se ha excedido el límite de conexiones"}
+{"level":"error","message":"Error al intentar guardar el archivo"}
+{"level":"fatal","message":"Error crítico: conexión perdida con la base de datos"}
