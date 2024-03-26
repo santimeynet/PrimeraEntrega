@@ -9,7 +9,8 @@ import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
 import passport from "passport";
 import { addLogger } from "./utils/logger.js";
-
+import { swaggerSpecs } from './config/docConfig.js';
+import swaggerUi from "swagger-ui-express";
 
 import {__dirname} from './utils.js'
 import viewsRouter from './routes/views.routes.js';
@@ -40,6 +41,8 @@ app.use(express.static(__dirname + '/public'));
 app.use("/api/users", usersRouter);
 app.use(errorHandler);
 app.use(addLogger);
+
+app.use("/api/docs",swaggerUi.serve,swaggerUi.setup(swaggerSpecs));
 
 app.get("/", (req,res)=>{
     req.logger.warn("Error!");
